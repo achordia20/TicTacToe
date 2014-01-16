@@ -42,14 +42,14 @@ public class Board {
 			return false;
 		
 		int pos = move.pos - 1;
-		MoveType mt = move.mt;
+		MoveType mt = move.type;
 		
 		int row = pos / board.length;
 		int col = pos % board.length;
 		
 		if (mt == MoveType.X || mt == MoveType.O) {
 			if (board[row][col] == MoveType._) {
-				board[row][col] = move.mt;
+				board[row][col] = move.type;
 				moves++;
 				return true;
 			}

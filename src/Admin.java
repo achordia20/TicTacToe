@@ -37,10 +37,11 @@ public class Admin {
 			}
 		}
 		
-		b.print();
+		b.print();	//Print the original board
 		
-		Integer pos = null;
 		while(true) {
+			Integer pos = null;
+			//Get the user move
 			while (pos == null) {
 				System.out.print("What's your move? [1-9] : ");
 				try {
@@ -71,6 +72,7 @@ public class Admin {
 				System.out.println("Game is a Tie");
 				break;
 			}
+			
 			if (b.hasWinner()) {
 				b.print();
 				System.out.println("User has lost!");
@@ -82,7 +84,6 @@ public class Admin {
 			}
 			
 			b.print();
-			pos = null;
 		}
 	}
 }

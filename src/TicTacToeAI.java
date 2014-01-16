@@ -4,20 +4,20 @@ import java.util.ArrayList;
 
 public class TicTacToeAI {
 	Board board;
-	MoveType moveType;
+	MoveType myMoveType;
 	MoveType theirMoveType;
 	
 	Boolean placeInCorner = false;
 	
-	public TicTacToeAI(Board b, MoveType mT) {
+	public TicTacToeAI(Board b, MoveType type) {
 		this.board = b;
-		this.moveType = mT;
-		this.theirMoveType = mT.other();
+		this.myMoveType = type;
+		this.theirMoveType = type.other();
 	}
 	
 	public TTTMove move() {
-		MinMaxData data = minmax(2, moveType);
-		return new TTTMove(moveType, data.pos);
+		MinMaxData data = minmax(2, myMoveType);
+		return new TTTMove(myMoveType, data.pos);
 	}
 	
 	private ArrayList<Integer> getOpenMoves() {
@@ -35,7 +35,7 @@ public class TicTacToeAI {
 	private MinMaxData minmax(int depth, MoveType type) {
 		ArrayList<Integer> openMoves = getOpenMoves();
 		
-		MinMaxData best = new MinMaxData((type == moveType) ? Integer.MIN_VALUE : Integer.MAX_VALUE);
+		MinMaxData best = new MinMaxData((type == myMoveType) ? Integer.MIN_VALUE : Integer.MAX_VALUE);
 		
 		if (openMoves.isEmpty() || depth == 0) {
 			best.score = getBoardScore();
@@ -44,14 +44,14 @@ public class TicTacToeAI {
 			for (Integer move : openMoves) {
 				board.insert(new TTTMove(type, move));
 				
-				if (type == moveType) {
-					currentScore = minmax(depth - 1, moveType.other()).score;
+				if (type == myMoveType) {
+					currentScore = minmax(depth - 1, myMoveType.other()).score;
 					if (currentScore > best.score) {
 						best.score = currentScore;
 						best.pos = move;
 					}
 				} else {
-					currentScore = minmax(depth - 1, moveType).score;
+					currentScore = minmax(depth - 1, myMoveType).score;
 					if (currentScore < best.score) {
 						best.score = currentScore;
 						best.pos = move;
@@ -82,47 +82,47 @@ public class TicTacToeAI {
 		MoveType m2 = board.atPos(pos2);
 		MoveType m3 = board.atPos(pos3);
 		
-		if (m1 == moveType) {
-			if (m2 == theirMoveType || m3 == theirMoveType)
+		if (m1 == myMoveType) {
+			if (m2 == theirMoveType || m3 == theirMoveType)  //both moveTypes there
 				return 0;
 			
-			if (m2 == moveType && m3 == moveType)
+			if (m2 == myMoveType && m3 == myMoveType)	//all three same as AI
 				return 100;
-			else if (m2 == moveType || m3 == moveType)
+			else if (m2 == myMoveType || m3 == myMoveType)	//2 / 3 are same as AI
 				return 10;
-			else
+			else			// only one same as AI
 				return 1;
 		} else if (m1 == theirMoveType) {
-			if (m2 == moveType || m3 == moveType)
+			if (m2 == myMoveType || m3 == myMoveType)	//both moveTypes there
 				return 0;
 			
-			if (m2 == theirMoveType && m3 == theirMoveType)
+			if (m2 == theirMoveType && m3 == theirMoveType)	//all three same as user
 				return -100;
-			else if (m2 == theirMoveType || m3 == theirMoveType)
+			else if (m2 == theirMoveType || m3 == theirMoveType) //2/3 are same as user
 				return -10;
-			else
+			else		// only one same as user
 				return -1;
 		} else {
-			if (m2 == moveType) {
-				if (m3 == theirMoveType)
+			if (m2 == myMoveType) {
+				if (m3 == theirMoveType)	// both moveTypes there
 					return 0;
 				
-				if (m3 == moveType)
+				if (m3 == myMoveType)	// 2/ 3 same as AI
 					return 10;
-				return 1;
+				return 1;	// only one same as AI
 			} else if (m2 == theirMoveType) {
-				if (m3 == moveType)
+				if (m3 == myMoveType)			// both moveTypes there
 					return 0;
 				
-				if (m3 == theirMoveType)
+				if (m3 == theirMoveType)	// 2/3 same as user
 					return -10;
-				return -1;
+				return -1;		//only one same as user
 			} else {
-				if (m3 == moveType)
+				if (m3 == myMoveType)	// only one same as AI
 					return 1;
-				else if (m3 == theirMoveType)
+				else if (m3 == theirMoveType)	// only one same as user
 					return -1;
-				return 0;
+				return 0;	// all blank
 			}
 		}
 	}

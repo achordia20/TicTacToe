@@ -1,11 +1,11 @@
 
 
 public class TTTMove {
-	public MoveType mt;
+	public MoveType type;
 	public int pos;
 	
 	public TTTMove(MoveType mt, int p) {
-		this.mt = mt;
+		this.type = mt;
 		this.pos = p;
 	}
 }
