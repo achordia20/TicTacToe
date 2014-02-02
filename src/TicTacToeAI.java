@@ -83,47 +83,47 @@ public class TicTacToeAI {
 		MoveType m3 = board.atPos(pos3);
 		
 		if (m1 == myMoveType) {
-			if (m2 == theirMoveType || m3 == theirMoveType)  //both moveTypes there
-				return 0;
-			
-			if (m2 == myMoveType && m3 == myMoveType)	//all three same as AI
-				return 100;
-			else if (m2 == myMoveType || m3 == myMoveType)	//2 / 3 are same as AI
-				return 10;
-			else			// only one same as AI
-				return 1;
+			return getScoreForRow(myMoveType, m1, m2, m3);
 		} else if (m1 == theirMoveType) {
-			if (m2 == myMoveType || m3 == myMoveType)	//both moveTypes there
+			return getScoreForRow(theirMoveType, m1, m2, m3);
+		} else {
+			return calculateFromEmptyMoveType(m1, m2, m3);
+		}
+	}
+	
+	private int getScoreForRow(MoveType base, MoveType m1, MoveType m2, MoveType m3) {
+		if (base.other() == m2 || base.other() == m3)
+			return 0;
+		
+		if (m2 == base && m3 == base)
+			return (base == myMoveType) ? 100 : -100;
+		else if (m2 == base || m3 == base)
+			return (base == myMoveType) ? 10 : -10;
+		else
+			return (base == myMoveType) ? 1 : -1;
+	}
+	
+	private int calculateFromEmptyMoveType(MoveType m1, MoveType m2, MoveType m3) {
+		if (m2 == myMoveType) {
+			if (m3 == theirMoveType)	// both moveTypes there
 				return 0;
 			
-			if (m2 == theirMoveType && m3 == theirMoveType)	//all three same as user
-				return -100;
-			else if (m2 == theirMoveType || m3 == theirMoveType) //2/3 are same as user
+			if (m3 == myMoveType)	// 2/ 3 same as AI
+				return 10;
+			return 1;	// only one same as AI
+		} else if (m2 == theirMoveType) {
+			if (m3 == myMoveType)			// both moveTypes there
+				return 0;
+			
+			if (m3 == theirMoveType)	// 2/3 same as user
 				return -10;
-			else		// only one same as user
-				return -1;
+			return -1;		//only one same as user
 		} else {
-			if (m2 == myMoveType) {
-				if (m3 == theirMoveType)	// both moveTypes there
-					return 0;
-				
-				if (m3 == myMoveType)	// 2/ 3 same as AI
-					return 10;
-				return 1;	// only one same as AI
-			} else if (m2 == theirMoveType) {
-				if (m3 == myMoveType)			// both moveTypes there
-					return 0;
-				
-				if (m3 == theirMoveType)	// 2/3 same as user
-					return -10;
-				return -1;		//only one same as user
-			} else {
-				if (m3 == myMoveType)	// only one same as AI
-					return 1;
-				else if (m3 == theirMoveType)	// only one same as user
-					return -1;
-				return 0;	// all blank
-			}
+			if (m3 == myMoveType)	// only one same as AI
+				return 1;
+			else if (m3 == theirMoveType)	// only one same as user
+				return -1;
+			return 0;	// all blank
 		}
 	}
 }
